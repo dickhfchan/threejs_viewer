@@ -1,2 +1,8 @@
+import { FiberViewer } from '../fiber-comp/comp/FiberViewer'
 
-console.log('index!')
+const fiberViewer = new FiberViewer({
+    container: document.getElementById('fiber-comp-c1-')
+})
+
+fiberViewer.startup()
+
