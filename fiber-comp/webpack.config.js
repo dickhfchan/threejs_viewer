@@ -1,5 +1,5 @@
-const fs = require('fs')
-// const CopyPlugin = require('copy-webpack-plugin')
+// const fs = require('fs')
+const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path');
 const process = require('process')
@@ -77,19 +77,19 @@ const config0 = () => ({
             template: `src/crossyo/${webSubPath}/template/demo1.html`,
         }),
 
-        // new CopyPlugin({
-        //     patterns: [
-        //         {
-        //             from: path.resolve(__dirname, `../../../asset`),
-        //             to: path.resolve(__dirname, `${deployPath}/${webSubPath}/asset`),
-        //             // filter: async (path) => {
-        //             //     // console.log(path)
-        //             //     return /\.(exr|png|jpg|glb)$/.test(path)
-        //             // },
-        //             noErrorOnMissing: true,
-        //         },
-        //     ]
-        // })
+        new CopyPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, `public`),
+                    to: path.resolve(__dirname, `${deployPath}/${webSubPath}`),
+                    // filter: async (path) => {
+                    //     // console.log(path)
+                    //     return /\.(exr|png|jpg|glb)$/.test(path)
+                    // },
+                    noErrorOnMissing: true,
+                },
+            ]
+        })
     ],
     // https://webpack.js.org/configuration/dev-server/
     devServer: {
