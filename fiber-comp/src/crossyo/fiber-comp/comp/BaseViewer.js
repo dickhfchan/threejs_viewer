@@ -1,5 +1,9 @@
-import { Clock, Color, Mesh, MeshStandardMaterial, PerspectiveCamera, Scene, SphereGeometry, WebGLRenderer } from "three"
+import { BoxGeometry, Clock, Color, Mesh, MeshStandardMaterial, PerspectiveCamera, Scene, SphereGeometry, WebGLRenderer } from "three"
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
+/**
+ * base level viewer
+ */
 export class BaseViewer {
 
     constructor({ container }) {
@@ -42,19 +46,23 @@ export class BaseViewer {
         this.scene_.background = new Color(0x6699cc)
 
         this.on_resize__ = () => {
-            this.on_resize__()
+            this.resize_()
         }
         window.addEventListener('resize', this.on_resize__)
         this.resize_()
 
         { // object for debug
-            let m = new Mesh(new SphereGeometry(), new MeshStandardMaterial({
-                color: 0xff0000,
-            }))
+            let m = new Mesh(
+                // new SphereGeometry(),
+                new BoxGeometry(),
+                new MeshStandardMaterial({
+                    color: 0xff0000,
+                }))
             this.scene_.add(m)
         }
 
-        // controls
+        this.controls_ = new OrbitControls(this.camera_, this.renderer_.domElement)
+        this.controls_.enableDamping = true
 
         this.animate_()
 
@@ -98,6 +106,12 @@ export class BaseViewer {
     animate_() {
         if (!this.disposed_) {
             requestAnimationFrame(() => { this.animate_() })
+
+            const delta = this.clock_.getDelta()
+
+            if (this.controls_.enabled) {
+                this.controls_.update(delta)
+            }
 
             this.renderer_.render(this.scene_, this.camera_)
         }

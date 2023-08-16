@@ -1,7 +1,7 @@
 import { BaseViewer } from "./BaseViewer"
 
 /**
- * application 
+ * application level viewer
  */
 export class FiberViewer extends BaseViewer {
 
