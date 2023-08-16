@@ -28,8 +28,6 @@ export class BaseViewer {
 
         this.clock_ = new Clock()
 
-
-
     }
 
 
