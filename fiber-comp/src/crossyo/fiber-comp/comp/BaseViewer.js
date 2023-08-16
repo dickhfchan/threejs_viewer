@@ -51,15 +51,7 @@ export class BaseViewer {
         window.addEventListener('resize', this.on_resize__)
         this.resize_()
 
-        { // object for debug
-            let m = new Mesh(
-                // new SphereGeometry(),
-                new BoxGeometry(),
-                new MeshStandardMaterial({
-                    color: 0xff0000,
-                }))
-            this.scene_.add(m)
-        }
+
 
         this.controls_ = new OrbitControls(this.camera_, this.renderer_.domElement)
         this.controls_.enableDamping = true
@@ -117,5 +109,24 @@ export class BaseViewer {
         }
     }
 
+
+    // -------------------------------------------------------------------------
+
+
+    setup_demo_scene_() {
+
+        let m = new Mesh(
+            // new SphereGeometry(),
+            new BoxGeometry(),
+            new MeshStandardMaterial({
+                color: 0xff0000,
+            }))
+        this.scene_.add(m)
+
+    }
+
+    setupIBL() {
+               
+    }
 
 }

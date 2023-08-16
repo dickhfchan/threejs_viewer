@@ -9,5 +9,10 @@ export class FiberViewer extends BaseViewer {
         super({ container })
     }
 
+    startup() {
+        super.startup()
+        this.setupIBL()
+        this.setup_demo_scene_()
+    }
 
 }
