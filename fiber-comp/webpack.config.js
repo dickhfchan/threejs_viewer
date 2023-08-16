@@ -8,7 +8,7 @@ const process = require('process')
 
 // const deployPath = '../../var/web'
 const deployPath = 'dist'
-const webSubPath = 'fiber-comp'
+const webSubPath = 'fiber-comp-example'
 
 const config0 = () => ({
     // https://webpack.js.org/concepts/mode/
@@ -16,11 +16,7 @@ const config0 = () => ({
     // mode: 'production',
     devtool: 'inline-source-map',
     //
-    // entry: (() => {
-    //     let obj = {}
-    //     obj[webSubPath] = `./src/crossyo/${webSubPath}/web.js`
-    //     return obj
-    // })(),
+    entry: `./src/crossyo/${webSubPath}/demo1.js`,
     output: {
         path: path.resolve(__dirname, `${deployPath}/${webSubPath}`),
         publicPath: `/${webSubPath}/`,
