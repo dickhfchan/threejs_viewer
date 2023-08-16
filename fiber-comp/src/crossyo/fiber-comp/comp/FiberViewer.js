@@ -6,13 +6,14 @@ import { BaseViewer } from "./BaseViewer"
 export class FiberViewer extends BaseViewer {
 
     constructor({ container }) {
-        super({ container })
+        super({ container, assetPath: './asset' })
     }
 
     startup() {
         super.startup()
-        this.setupIBL()
-        this.setup_demo_scene_()
+        this.setupIBL().then(() => {
+            this.setup_demo_scene_()
+        })
     }
 
 }

@@ -1,14 +1,20 @@
-import { BoxGeometry, Clock, Color, Mesh, MeshStandardMaterial, PerspectiveCamera, Scene, SphereGeometry, WebGLRenderer } from "three"
+import {
+    ACESFilmicToneMapping, BoxGeometry, Clock, Color, DefaultLoadingManager, EquirectangularReflectionMapping,
+    Mesh, MeshStandardMaterial, PMREMGenerator, PerspectiveCamera, Scene, SphereGeometry, TorusKnotGeometry, WebGLRenderer
+} from "three"
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 
 /**
  * base level viewer
  */
 export class BaseViewer {
 
-    constructor({ container }) {
+    constructor({ container, assetPath }) {
 
         this.container_ = container
+        this.assetPath_ = assetPath
+
         this.pixelRatio_ = window.devicePixelRatio
 
         this.disposed_ = false
@@ -21,6 +27,8 @@ export class BaseViewer {
         }
 
         this.clock_ = new Clock()
+
+
 
     }
 
@@ -43,15 +51,17 @@ export class BaseViewer {
         this.camera_.position.set(0, 0, 20)
 
         this.scene_ = new Scene()
-        this.scene_.background = new Color(0x6699cc)
+        this.scene_.background = new Color(0xe4eff0)
+
+        this.env_ref_ = {
+            envMap: null
+        }
 
         this.on_resize__ = () => {
             this.resize_()
         }
         window.addEventListener('resize', this.on_resize__)
         this.resize_()
-
-
 
         this.controls_ = new OrbitControls(this.camera_, this.renderer_.domElement)
         this.controls_.enableDamping = true
@@ -117,16 +127,41 @@ export class BaseViewer {
 
         let m = new Mesh(
             // new SphereGeometry(),
-            new BoxGeometry(),
+            // new BoxGeometry(),
+            new TorusKnotGeometry(18/7, 8/7, 150, 20),
             new MeshStandardMaterial({
-                color: 0xff0000,
+                color: 0x78cce2,
+                envMap: this.env_ref_.envMap,
+                metalness: 1,
+                roughness: 0.3,
             }))
         this.scene_.add(m)
 
     }
 
     setupIBL() {
-               
+        return new Promise(resolve => {
+
+            this.renderer_.toneMapping = ACESFilmicToneMapping
+
+            const pmremGenerator = new PMREMGenerator(this.renderer_)
+            pmremGenerator.compileEquirectangularShader()
+
+            new EXRLoader().load(`${this.assetPath_}/env/ninomaru_teien_1k.exr`, texture => {
+                texture.mapping = EquirectangularReflectionMapping
+
+                // exrCubeRenderTarget = 
+                pmremGenerator.fromEquirectangular(texture)
+                this.env_ref_.envMap = texture
+                // this.scene_.background = texture
+            })
+
+            DefaultLoadingManager.onLoad = () => {
+                pmremGenerator.dispose()
+                resolve()
+            }
+
+        })
     }
 
 }
