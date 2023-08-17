@@ -130,8 +130,8 @@ module.exports = env => {
 
     console.log(`is_prod ${is_prod}, is_lib ${is_lib}`)
 
-    const deployPath = 'dist' + (is_lib ? '_lib' : '')
-    const webSubPath = 'fiber-comp-example' + (is_lib ? '_lib' : '')
+    const deployPath = 'dist' + (is_lib ? '-lib' : '')
+    const webSubPath = 'fiber-comp-example' + (is_lib ? '-lib' : '')
 
     const config1 = config0({ deployPath, webSubPath })
 
