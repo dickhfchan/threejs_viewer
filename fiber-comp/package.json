@@ -12,6 +12,7 @@
     "author": "crossyo",
     "private": true,
     "dependencies": {
+        "events": "^3.3.0",
         "three": "^0.155.0"
     },
     "devDependencies": {

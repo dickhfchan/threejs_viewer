@@ -44,7 +44,12 @@
             container: document.getElementById('fiber-comp-c1-')
         })
 
+        fiberViewer.on('initLightCompletion', e => {
+            fiberViewer.setup_demo_scene_()
+        })
+
         fiberViewer.startup()
+
     </script>
 
 </body>

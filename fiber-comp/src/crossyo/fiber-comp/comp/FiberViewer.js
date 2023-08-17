@@ -5,8 +5,8 @@ import { BaseViewer } from "./BaseViewer"
  */
 export class FiberViewer extends BaseViewer {
 
-    constructor({ container }) {
-        super({ container, assetPath: './asset' })
+    constructor({ container, assetPath = './asset' }) {
+        super({ container, assetPath })
     }
 
     startup() {
@@ -14,7 +14,10 @@ export class FiberViewer extends BaseViewer {
 
         // async setup IBL light 
         this.setupIBL().then(() => {
-            this.setup_demo_scene_()
+            // this.setup_demo_scene_() // just demo and test!
+
+            this.emit('initLightCompletion')
+
         })
     }
 

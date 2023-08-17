@@ -4,13 +4,17 @@ import {
 } from "three"
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'
+import EventEmitter from "events"
 
 /**
  * base level viewer
  */
-export class BaseViewer {
+export class BaseViewer extends EventEmitter {
 
     constructor({ container, assetPath }) {
+
+        super()
 
         this.container_ = container
         this.assetPath_ = assetPath
@@ -154,14 +158,26 @@ export class BaseViewer {
                 pmremGenerator.fromEquirectangular(texture)
                 this.env_ref_.envMap = texture
                 // this.scene_.background = texture
-            })
 
-            DefaultLoadingManager.onLoad = () => {
                 pmremGenerator.dispose()
                 resolve()
-            }
+            })
+
+            // DefaultLoadingManager.onLoad = () => {
+            //     pmremGenerator.dispose()
+            //     resolve()
+            // }
 
         })
+    }
+
+    loadModel({path, name}) {
+
+        const loader = new GLTFLoader().setPath(path)
+        loader.load(name, gltf => {
+            this.scene_.add(gltf.scene)
+        })
+
     }
 
 }
