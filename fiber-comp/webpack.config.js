@@ -4,13 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path');
 const process = require('process')
 
-// const _bake_names = require('./_bake-names')
-
-// const deployPath = '../../var/web'
-const deployPath = 'dist'
-const webSubPath = 'fiber-comp-example'
-
-const config0 = () => ({
+const config0 = ({ deployPath, webSubPath }) => ({
     // https://webpack.js.org/concepts/mode/
     mode: 'development',
     // mode: 'production',
@@ -82,11 +76,6 @@ const config0 = () => ({
                 {
                     from: path.resolve(__dirname, `public`),
                     to: path.resolve(__dirname, `${deployPath}/${webSubPath}`),
-                    // filter: async (path) => {
-                    //     // console.log(path)
-                    //     return /\.(exr|png|jpg|glb)$/.test(path)
-                    // },
-                    noErrorOnMissing: true,
                 },
             ]
         })
@@ -135,14 +124,43 @@ const config0 = () => ({
 })
 
 module.exports = env => {
-    const config1 = config0()
-    if (env) {
 
-        if (env.prod) {
-            config1.mode = 'production'
-            delete config1.devtool
+    const is_prod = !!(env?.prod)
+    const is_lib = !!(env?.lib)
+
+    console.log(`is_prod ${is_prod}, is_lib ${is_lib}`)
+
+    const deployPath = 'dist' + (is_lib ? '_lib' : '')
+    const webSubPath = 'fiber-comp-example' + (is_lib ? '_lib' : '')
+
+    const config1 = config0({ deployPath, webSubPath })
+
+    if (is_prod) {
+        config1.mode = 'production'
+        delete config1.devtool
+    }
+
+    if (is_lib) {
+        config1.entry = `./src/crossyo/fiber-comp/lib.js`
+        config1.output.library = {
+            // type: 'commonjs',
+            // type: 'umd',
+            type: 'window',
         }
-
+        config1.output.filename = 'fiber-comp-v1.js'
+        config1.plugins = [
+            config1.plugins[1], // keep copy plugin
+            new CopyPlugin({
+                patterns: [
+                    {
+                        from: path.resolve(__dirname, `public-lib`),
+                        to: path.resolve(__dirname, `${deployPath}/${webSubPath}`),
+                    },
+                ]
+            })
+        ]
+        config1.devServer.port = 4161
+        config1.devServer.open.target = `${webSubPath}/demo1-lib.html`
     }
 
     return config1

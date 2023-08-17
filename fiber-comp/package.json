@@ -5,7 +5,9 @@
     "main": "index.js",
     "scripts": {
         "serve": "webpack serve",
-        "build": "webpack --env prod"
+        "build": "webpack --env prod",
+        "serve-lib": "webpack serve --env lib",
+        "build-lib": "webpack --env prod --env lib"
     },
     "author": "crossyo",
     "private": true,

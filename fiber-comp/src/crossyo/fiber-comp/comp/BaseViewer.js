@@ -126,7 +126,7 @@ export class BaseViewer {
         let m = new Mesh(
             // new SphereGeometry(),
             // new BoxGeometry(),
-            new TorusKnotGeometry(18/7, 8/7, 150, 20),
+            new TorusKnotGeometry(18 / 7, 8 / 7, 150, 20),
             new MeshStandardMaterial({
                 color: 0x78cce2,
                 envMap: this.env_ref_.envMap,
@@ -137,6 +137,8 @@ export class BaseViewer {
 
     }
 
+    // Please use IBL ligthing the scene, prevent old lighting mode (ex. point, diretional light in scene)
+    // https://en.wikipedia.org/wiki/Image-based_lighting
     setupIBL() {
         return new Promise(resolve => {
 
