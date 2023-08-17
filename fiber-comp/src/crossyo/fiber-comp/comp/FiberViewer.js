@@ -11,6 +11,8 @@ export class FiberViewer extends BaseViewer {
 
     startup() {
         super.startup()
+
+        // async setup IBL light 
         this.setupIBL().then(() => {
             this.setup_demo_scene_()
         })
